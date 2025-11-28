@@ -1,0 +1,184 @@
+/* --- 1. DESIGN GÉNÉRAL ET MISES EN PAGE DE BASE --- */
+body {
+    background-color: #121212; /* Mode Sombre */
+    color: white;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+#app-container {
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+h1 { color: #f4c542; text-transform: uppercase; font-size: 1.5rem; }
+p { line-height: 1.6; color: #ddd; }
+
+/* BOUTONS (Styles du jeu principal et des écrans d'accueil) */
+.btn {
+    background: linear-gradient(45deg, #f4c542, #d4a017);
+    border: none;
+    padding: 15px 30px;
+    border-radius: 30px;
+    color: black;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(244, 197, 66, 0.4);
+    transition: transform 0.2s;
+}
+.btn:active { transform: scale(0.95); }
+
+/* LE RADAR (Styles pour l'étape GPS) */
+#radar-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: 30px auto;
+}
+
+.pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    opacity: 0;
+    animation: pulse-anim 2s infinite;
+}
+
+@keyframes pulse-anim {
+    0% { transform: scale(0.5); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* COULEURS DU RADAR */
+.cold .pulse { background-color: blue; }
+.warm .pulse { background-color: orange; }
+.hot .pulse { background-color: red; animation-duration: 0.8s; }
+
+/* INPUT CODE SECRET */
+input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background: #222;
+    color: white;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* TICKET DE RÉCOMPENSE */
+.ticket {
+    background: white;
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px dashed #333;
+    margin-top: 20px;
+}
+
+/* --- 2. Styles pour l'Onboarding (Nouveau Code) --- */
+
+#onboarding-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #121212;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.onboarding-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+.onboarding-slide.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.onboarding-slide video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+    filter: brightness(0.4); /* Assombrit la vidéo pour la lisibilité du texte */
+}
+
+.slide-content {
+    z-index: 1;
+    text-align: center;
+    max-width: 80%; /* Pour ne pas avoir de texte trop large */
+}
+
+.onboarding-slide h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #f4c542; /* Reprend la couleur du thème */
+    text-transform: uppercase;
+}
+
+.onboarding-slide h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.onboarding-slide p {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+}
+
+.onboarding-img {
+    max-width: 80%;
+    height: auto;
+    margin: 20px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.language-selector .btn {
+    margin: 10px;
+}

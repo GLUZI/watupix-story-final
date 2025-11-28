@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watupix Story - Moteur V2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="onboarding-container">
+        <div class="onboarding-slide active" id="slide-1">
+            <video id="onboarding-video" autoplay loop muted playsinline>
+                <source src="assets/videos/watupix_onboarding_intro.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la vidéo.
+            </video>
+            <div class="slide-content">
+                <h1>Watupix Story</h1>
+                <p>Vivez la ville autrement</p>
+                <button class="btn" onclick="nextSlide()">Commencer</button>
+            </div>
+        </div>
+
+        <div class="onboarding-slide" id="slide-2">
+            <div class="slide-content">
+                <h2>Votre ville, un terrain de jeu grandeur nature</h2>
+                <img src="assets/images/concept_game.png" alt="La ville comme un jeu" class="onboarding-img">
+                <p>Découvrez des histoires cachées, résolvez des énigmes, et interagissez avec le patrimoine de manière unique.</p>
+                <button class="btn" onclick="nextSlide()">Suivant</button>
+            </div>
+        </div>
+
+        <div class="onboarding-slide" id="slide-3">
+            <div class="slide-content">
+                <h2>Les commerçants, vos complices</h2>
+                <img src="assets/images/concept_commerce.png" alt="Les commerçants comme des complices" class="onboarding-img">
+                <p>Ils détiennent des indices et des trésors. Soutenez l'économie locale tout en vous amusant !</p>
+                <div class="language-selector">
+                    <button class="btn lang-btn" onclick="selectLanguageAndStart('fr')">Français</button>
+                    <button class="btn lang-btn" onclick="selectLanguageAndStart('en')">English</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-container" style="display:none;">
+        <h1 id="app-title">Chargement de l'histoire...</h1>
+        <p id="app-description"></p>
+        
+        <div id="content-area">
+            </div>
+
+        <button class="btn" id="main-button" style="display:none;"></button>
+    </div>
+
+    <script src="story-engine.js"></script>
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 3;
+
+        function nextSlide() {
+            document.getElementById(`slide-${currentSlide}`).classList.remove('active');
+            currentSlide++;
+            if (currentSlide <= totalSlides) {
+                document.getElementById(`slide-${currentSlide}`).classList.add('active');
+            } else {
+                // Should not happen, as slide 3 has language selector
+            }
+        }
+
+        function selectLanguageAndStart(lang) {
+            document.getElementById('onboarding-container').style.display = 'none';
+            document.getElementById('app-container').style.display = 'flex';
+            // Placeholder: Ici, nous chargeons directement l'histoire en FR pour l'instant
+            // Plus tard, nous aurons une logique pour charger bretzel_dor_fr.json ou bretzel_dor_en.json
+            loadStory(`stories/bretzel_dor.json`); // Ceci appellera la fonction dans story-engine.js
+        }
+    </script>
+</body>
+</html>
