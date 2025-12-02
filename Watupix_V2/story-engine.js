@@ -74,7 +74,6 @@ function renderMap(step) {
         <p>${step.clueText}</p>
     `;
     
-    // Vérification de la géolocalisation
     if (!navigator.geolocation) {
         APP_DESCRIPTION.textContent = 'La géolocalisation n\'est pas supportée par votre navigateur.';
         return;
@@ -96,35 +95,42 @@ function renderMap(step) {
         // Afficher le titre de la carte maintenant qu'elle est prête
         APP_TITLE.textContent = step.titre || currentStoryData.title;
         
-        // --- NOUVEAU : Délai pour laisser le DOM se mettre à jour ---
-        setTimeout(() => {
-            // Initialisation de la carte, centrée sur la position fournie (utilisateur ou cible)
-            mymap = L.map('mapid').setView([centerLat, centerLon], 13);
-            
-            // Forcer le recalcul de la taille de la carte après l'initialisation
-            mymap.invalidateSize(); 
+        // Initialisation de la carte, centrée sur la position fournie (utilisateur ou cible)
+        mymap = L.map('mapid').setView([centerLat, centerLon], 13);
+        
+        // CORRECTION MAJEURE: Forcer l'initialisation de la carte après que le DOM soit prêt
+        mymap.on('load', function() {
+            mymap.invalidateSize();
+            console.log('Map size invalidated after loading.');
+        });
+        
+        // Si l'initialisation vient du GPS, cela fonctionne souvent mieux
+        if (!isFallback) {
+             mymap.on('locationfound', function() {
+                 mymap.invalidateSize();
+             });
+        }
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors',
-                maxZoom: 19
-            }).addTo(mymap);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(mymap);
 
-            // Marqueur de la Cible
-            L.marker([targetLat, targetLon]).addTo(mymap)
-                .bindPopup(step.targetName || 'Cible').openPopup();
+        // Marqueur de la Cible
+        L.marker([targetLat, targetLon]).addTo(mymap)
+            .bindPopup(step.targetName || 'Cible').openPopup();
 
-            // Cercle de Tolérance
-            L.circle([targetLat, targetLon], {
-                color: 'red',
-                fillColor: '#f03',
-                fillOpacity: 0.2,
-                radius: rayon
-            }).addTo(mymap);
-            
-            if (isFallback) {
-                 APP_DESCRIPTION.textContent = "Géolocalisation en cours... Carte centrée sur la cible en attendant.";
-            }
-        }, 250); // Délai de 250 ms pour le rendu du DOM
+        // Cercle de Tolérance
+        L.circle([targetLat, targetLon], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.2,
+            radius: rayon
+        }).addTo(mymap);
+        
+        if (isFallback) {
+             APP_DESCRIPTION.textContent = "Géolocalisation en cours... Carte centrée sur la cible en attendant.";
+        }
     };
     
     // --- CONTOURNNEMENT (FALLBACK) ---
