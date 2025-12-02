@@ -34,7 +34,7 @@
         <div class="onboarding-slide" id="slide-3">
             <div class="slide-content">
                 <h2>Les commerçants, vos complices</h2>
-                <img src="assets/images/concept_commerce.png" alt="Les commerçants comme des complices" class="onboarding-img">
+                <img src="assets/images/concept_commerce.png" alt="Les commerçants comme un complice" class="onboarding-img">
                 <p>Ils détiennent des indices et des trésors. Soutenez l'économie locale tout en vous amusant !</p>
                 <div class="language-selector">
                     <button class="btn lang-btn" onclick="selectLanguageAndStart('fr')">Français</button>
@@ -57,7 +57,6 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="Watupix_V2/story-engine.js"></script>
     <script>
-        // Ce script gère l'onboarding
         let currentSlide = 1;
         const totalSlides = 3;
 
@@ -72,7 +71,7 @@
         function selectLanguageAndStart(lang) {
             document.getElementById('onboarding-container').style.display = 'none';
             document.getElementById('app-container').style.display = 'flex';
-            // IMPORTANT : AJOUT DE ?v=3.0 pour forcer le rechargement
+            // FORÇAGE DU RECHARGEMENT AVEC ?v=3.0
             loadStory(`Watupix_V2/stories/bretzel_final.json?v=3.0`); 
         }
     </script>
