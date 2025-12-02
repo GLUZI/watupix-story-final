@@ -68,7 +68,7 @@ function renderStep(step) {
 
 // --- AFFICHAGE DE LA CARTE Leaflet (RADAR_GPS) ---
 function renderMap(step) {
-    // Création du conteneur de la carte avec une hauteur fixée (50% de la fenêtre)
+    // Création du conteneur de la carte avec une hauteur fixée
     CONTENT_AREA.innerHTML = `
         <div id="mapid" style="height: 50vh; width: 100vw; margin-bottom: 10px;"></div>
         <p>${step.clueText}</p>
@@ -80,42 +80,74 @@ function renderMap(step) {
         return;
     }
 
-    // Coordonnées de la cible
+    // Coordonnées de la cible (Cathédrale de Strasbourg)
     const targetLat = step.targetLocation.lat;
     const targetLon = step.targetLocation.lon;
     const rayon = step.targetLocation.rayon || 20;
+    
+    let userMarker = null;
+    let mapInitialized = false;
 
-    // Initialisation de la carte, centrée sur la cible
-    mymap = L.map('mapid').setView([targetLat, targetLon], 13);
+    // Fonction pour initialiser la carte, centrée sur une position donnée
+    const initializeMap = (centerLat, centerLon, isFallback = false) => {
+        if (mapInitialized) return;
+        mapInitialized = true;
+        
+        // Afficher le titre de la carte maintenant qu'elle est prête
+        APP_TITLE.textContent = step.titre || currentStoryData.title;
+        
+        // Initialisation de la carte, centrée sur la position fournie (utilisateur ou cible)
+        mymap = L.map('mapid').setView([centerLat, centerLon], 13);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-        maxZoom: 19
-    }).addTo(mymap);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(mymap);
 
-    // Marqueur de la Cible
-    L.marker([targetLat, targetLon]).addTo(mymap)
-        .bindPopup(step.targetName || 'Cible').openPopup();
+        // Marqueur de la Cible
+        L.marker([targetLat, targetLon]).addTo(mymap)
+            .bindPopup(step.targetName || 'Cible').openPopup();
 
-    // Cercle de Tolérance (zone à atteindre)
-    L.circle([targetLat, targetLon], {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.2,
-        radius: rayon
-    }).addTo(mymap);
+        // Cercle de Tolérance
+        L.circle([targetLat, targetLon], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.2,
+            radius: rayon
+        }).addTo(mymap);
+        
+        if (isFallback) {
+             APP_DESCRIPTION.textContent = "Géolocalisation non autorisée. Carte centrée sur la cible.";
+        }
+    };
+    
+    // --- CONTOURNNEMENT (FALLBACK) ---
+    // Si la position n'est pas obtenue après 5 secondes, afficher la carte centrée sur la cible
+    const gpsTimeout = setTimeout(() => {
+        if (!mapInitialized) {
+            console.log("GPS timeout, using target as center.");
+            // Centrer sur la cible (Strasbourg)
+            initializeMap(targetLat, targetLon, true); 
+        }
+    }, 5000); // 5 secondes
 
     // ************* LOGIQUE DE VÉRIFICATION GPS *************
-    let userMarker = null;
-
     watchId = navigator.geolocation.watchPosition((position) => {
+        // Le GPS a réussi, annuler le timeout
+        clearTimeout(gpsTimeout);
+        
         const userLat = position.coords.latitude;
         const userLon = position.coords.longitude;
         const targetLocation = step.targetLocation;
 
+        if (!mapInitialized) {
+            // Initialiser la carte centrée sur l'utilisateur
+            initializeMap(userLat, userLon, false); 
+        }
+
         const distance = calculateDistance(userLat, userLon, targetLocation.lat, targetLocation.lon);
 
-        // Afficher la distance dans la description (au-dessus de la carte)
+        // Afficher la distance dans la description
         APP_DESCRIPTION.textContent = `Distance restante jusqu'à la cible : ${Math.round(distance)} mètres.`;
 
         // Mettre à jour le marqueur utilisateur sur la carte
@@ -130,8 +162,13 @@ function renderMap(step) {
         mymap.panTo([userLat, userLon]);
 
     }, (error) => {
+        // En cas d'erreur (souvent dû à un refus)
         console.error("Erreur GPS:", error);
-        APP_DESCRIPTION.textContent = "Erreur de géolocalisation. Assurez-vous que le GPS est activé et autorisé pour ce site.";
+        clearTimeout(gpsTimeout);
+        if (!mapInitialized) {
+            // Afficher la carte centrée sur la cible en cas d'erreur immédiate
+            initializeMap(targetLat, targetLon, true);
+        }
     }, { enableHighAccuracy: true });
 }
 
