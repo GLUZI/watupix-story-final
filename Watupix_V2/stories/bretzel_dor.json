@@ -19,7 +19,7 @@
       "stepId": 2,
       "type": "RADAR_GPS",
       "targetName": "Boulangerie de l'Oncle Hans (Rue des Orfèvres)",
-      "targetLocation": { 
+"targetLocation": { 
   "lat": 44.269917, 
   "lon": 4.756360, 
   "radius": 20 
@@ -47,3 +47,4 @@
   ]
 
 }
+
