@@ -61,6 +61,10 @@ function renderStep(step) {
             renderMap(step);
             break;
             
+        case 'ECRAN_VIDEO':
+            renderVideoScreen(step);
+            break;
+            
         default:
             APP_DESCRIPTION.textContent = `Type d'étape inconnu : ${step.taper}`;
     }
@@ -79,7 +83,7 @@ function renderMap(step) {
         return;
     }
 
-    // Coordonnées de la cible (Cathédrale de Strasbourg)
+    // Coordonnées de la cible 
     const targetLat = step.targetLocation.lat;
     const targetLon = step.targetLocation.lon;
     const rayon = step.targetLocation.rayon || 20;
@@ -98,7 +102,7 @@ function renderMap(step) {
         // Initialisation de la carte, centrée sur la position fournie (utilisateur ou cible)
         mymap = L.map('mapid').setView([centerLat, centerLon], 13);
         
-        // CORRECTION CLASSIQUE : Forcer le recalcul de la taille de la carte après un très petit délai
+        // Correction classique du bug d'affichage sur mobile
         setTimeout(() => {
             if(mymap) {
                 mymap.invalidateSize();
@@ -133,7 +137,7 @@ function renderMap(step) {
     const gpsTimeout = setTimeout(() => {
         if (!mapInitialized) {
             console.log("GPS timeout, using target as center.");
-            // Centrer sur la cible (Strasbourg)
+            // Centrer sur la cible 
             initializeMap(targetLat, targetLon, true); 
         }
     }, 5000); // 5 secondes
@@ -177,6 +181,27 @@ function renderMap(step) {
             initializeMap(targetLat, targetLon, true);
         }
     }, { enableHighAccuracy: true });
+}
+
+// --- AFFICHAGE D'UN ÉCRAN AVEC VIDÉO ---
+function renderVideoScreen(step) {
+    // La zone de contenu affiche un lecteur vidéo HTML5
+    CONTENT_AREA.innerHTML = `
+        <video controls playsinline style="width: 100%; max-height: 70vh; margin-bottom: 15px;">
+            <source src="assets/videos/${step.videoPath}" type="video/mp4">
+            Votre navigateur ne supporte pas la balise vidéo.
+        </video>
+        <p>${step.videoDescription || ''}</p>
+    `;
+    
+    MAIN_BUTTON.textContent = step.actionButtonText || "Continuer la visite";
+    MAIN_BUTTON.onclick = () => {
+        const nextStep = currentStoryData.steps.find(s => s.stepId === step.nextStepId);
+        if (nextStep) {
+            renderStep(nextStep);
+        }
+    };
+    MAIN_BUTTON.style.display = 'block';
 }
 
 // --- FONCTIONS SIMPLES ---
