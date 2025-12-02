@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watupix Story - Moteur V2</title>
+    <title>Watupix Story - Carte GPS</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
 
@@ -44,7 +45,7 @@
     </div>
 
     <div id="app-container" style="display:none;">
-        <h1 id="app-title">Chargement de l'histoire...</h1>
+        <h1 id="app-title">Chargement de la carte...</h1>
         <p id="app-description"></p>
         
         <div id="content-area">
@@ -53,8 +54,10 @@
         <button class="btn" id="main-button" style="display:none;"></button>
     </div>
 
-    <script src="story-engine.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="Watupix_V2/story-engine.js"></script>
     <script>
+        // Ce script gère l'onboarding
         let currentSlide = 1;
         const totalSlides = 3;
 
@@ -63,17 +66,14 @@
             currentSlide++;
             if (currentSlide <= totalSlides) {
                 document.getElementById(`slide-${currentSlide}`).classList.add('active');
-            } else {
-                // Should not happen, as slide 3 has language selector
             }
         }
 
         function selectLanguageAndStart(lang) {
             document.getElementById('onboarding-container').style.display = 'none';
             document.getElementById('app-container').style.display = 'flex';
-            // Placeholder: Ici, nous chargeons directement l'histoire en FR pour l'instant
-            // Plus tard, nous aurons une logique pour charger bretzel_dor_fr.json ou bretzel_dor_en.json
-            loadStory(`stories/bretzel_dor.json`); // Ceci appellera la fonction dans story-engine.js
+            // IMPORTANT : Utiliser le chemin corrigé et le nouveau nom du scénario
+            loadStory(`Watupix_V2/stories/bretzel_final.json`); 
         }
     </script>
 </body>
