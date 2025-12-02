@@ -78,8 +78,8 @@
         function selectLanguageAndStart(lang) {
             document.getElementById('onboarding-container').style.display = 'none';
             document.getElementById('app-container').style.display = 'flex';
-            // FORÇAGE DU RECHARGEMENT AVEC ?v=3.0
-            loadStory(`stories/bretzel_final.json?v=3.0`); 
+            // CORRECTION DU CHEMIN JSON POUR LE PC
+            loadStory(`./stories/bretzel_final.json?v=3.0`); 
         }
     </script>
 </body>
