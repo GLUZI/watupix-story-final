@@ -1,1 +1,64 @@
-
+{
+    "title": "Visite Vidéo du Patrimoine",
+    "steps": [
+        // Étape 1 : INTRODUCTION
+        {
+            "stepId": 1,
+            "taper": "ECRAN_D_INTRODUCTION",
+            "titre": "Découvrez la Ville",
+            "description": "Bienvenue dans cette visite guidée unique ! Utilisez la carte pour vous déplacer et débloquer les vidéos d'histoire locale.",
+            "actionButtonText": "Commencer la visite",
+            "nextStepId": 10
+        },
+        
+        // Étape 10 : RADAR GPS - Aller à la Cathédrale
+        {
+            "stepId": 10,
+            "taper": "RADAR_GPS",
+            "titre": "Aller à la Cathédrale",
+            "targetName": "Cathédrale Notre-Dame",
+            "targetLocation": {
+                "lat": 48.5817,
+                "lon": 7.7504,
+                "rayon": 30
+            },
+            "clueText": "Approchez-vous du pied de la tour pour débloquer la vidéo historique de cet édifice majeur.",
+            "nextStepId": 20
+        },
+        
+        // Étape 20 : ECRAN VIDÉO - Déclenchée après l'arrivée
+        {
+            "stepId": 20,
+            "taper": "ECRAN_VIDEO",
+            "titre": "L'Histoire de la Cathédrale",
+            "videoPath": "cathedrale_intro.mp4",
+            "videoDescription": "Regardez cette vidéo pour découvrir les secrets architecturaux de la Cathédrale, construite sur plusieurs siècles. (Vous pouvez insérer ici un lien vers une vidéo YouTube si vous préférez, mais le code actuel utilise un fichier local : `assets/videos/cathedrale_intro.mp4`).",
+            "actionButtonText": "Continuer vers le prochain lieu",
+            "nextStepId": 30
+        },
+        
+        // Étape 30 : RADAR GPS - Prochaine Destination
+        {
+            "stepId": 30,
+            "taper": "RADAR_GPS",
+            "titre": "Direction : La Petite France",
+            "targetName": "Quartier des Tanneurs",
+            "targetLocation": {
+                "lat": 48.5815,
+                "lon": 7.7410,
+                "rayon": 20
+            },
+            "clueText": "Le prochain point d'intérêt se trouve au bord de l'eau, dans le célèbre quartier historique.",
+            "nextStepId": 40
+        },
+        
+        // Étape 40 : ÉCRAN FINAL
+        {
+            "stepId": 40,
+            "taper": "ECRAN_D_INTRODUCTION",
+            "titre": "Fin de la Démo",
+            "description": "La visite est terminée ! Vous avez réussi à combiner la géolocalisation et la découverte vidéo. Vous pouvez maintenant ajouter vos propres étapes.",
+            "actionButtonText": "Recommencer"
+        }
+    ]
+}
