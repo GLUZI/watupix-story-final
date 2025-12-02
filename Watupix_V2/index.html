@@ -72,8 +72,8 @@
         function selectLanguageAndStart(lang) {
             document.getElementById('onboarding-container').style.display = 'none';
             document.getElementById('app-container').style.display = 'flex';
-            // IMPORTANT : Utiliser le chemin corrigé et le nouveau nom du scénario
-            loadStory(`Watupix_V2/stories/bretzel_final.json`); 
+            // IMPORTANT : AJOUT DE ?v=3.0 pour forcer le rechargement
+            loadStory(`Watupix_V2/stories/bretzel_final.json?v=3.0`); 
         }
     </script>
 </body>
