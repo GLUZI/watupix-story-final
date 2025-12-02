@@ -1,50 +1,26 @@
 {
-  "storyId": "BRETZEL_DOR_01",
-  "title": "Le Mystère du Bretzel d'Or",
-  "language": "FR",
-  "startPoint": {
-    "title": "Place de la Cathédrale",
-    "lat": 48.5826,
-    "lon": 7.7495
-  },
+  "title": "CARTE DE TEST",
   "steps": [
     {
+      "stepId": 0,
+      "taper": "ECRAN_D_INTRODUCTION",
+      "titre": "Début de l'expérience GPS",
+      "description": "Ceci est un test pour vérifier l'affichage de la carte et votre géolocalisation.",
+      "actionButtonText": "ACTIVER LA CARTE",
+      "nextStepId": 1
+    },
+    {
       "stepId": 1,
-      "type": "INTRO_SCREEN",
-      "title": "L'Appel de Maître Gustave",
-      "description": "Un moule magique a disparu ! Vous seul pouvez sauver les célèbres bretzels de Strasbourg. Votre mission commence là où l'histoire a été filmée.",
-      "actionButtonText": "ACCEPTER LA MISSION"
-    },
-    {
-      "stepId": 2,
-      "type": "RADAR_GPS",
-      "targetName": "Boulangerie de l'Oncle Hans (Rue des Orfèvres)",
-"targetLocation": { 
-  "lat": 44.269917, 
-  "lon": 4.756360, 
-  "radius": 20 
-},
-      "clueText": "Le signal s'arrête là où ça sent le kougelhopf. (Cible : 48.5830, 7.7510)",
-      "nextStepId": 3,
-      "simulation_button": true
-    },
-    {
-      "stepId": 3,
-      "type": "CODE_INPUT",
-      "title": "Le Mot de Passe",
-      "clueText": "Vous êtes dans la boutique. Entrez le mot de passe secret trouvé sur le chevalet près de la caisse.",
-      "solution": "LEVAIN",
-      "nextStepId": 4
-    },
-    {
-      "stepId": 4,
-      "type": "REWARD_SCREEN",
-      "title": "MISSION ACCOMPLIE !",
-      "rewardTitle": "Bretzel d'Or Débloqué",
-      "rewardDetails": "Montrez cet écran pour obtenir 1 Bretzel offert.",
-      "actionButtonText": "Terminer l'Aventure"
+      "taper": "RADAR_GPS",
+      "targetName": "Votre position actuelle (Test)",
+      "titre": "Carte GPS de Test",
+      "targetLocation": {
+        "lat": 44.269917,
+        "lon": 4.756360,
+        "rayon": 20000000 // Mettre un rayon énorme pour ne pas valider l'arrivée tout de suite
+      },
+      "clueText": "Regardez la carte ci-dessous. Vous devriez voir votre position et un marqueur pour la cible (votre position initiale).",
+      "nextStepId": 1 // Le jeu reste sur cette étape
     }
   ]
-
 }
-
