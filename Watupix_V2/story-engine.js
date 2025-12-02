@@ -96,29 +96,35 @@ function renderMap(step) {
         // Afficher le titre de la carte maintenant qu'elle est prête
         APP_TITLE.textContent = step.titre || currentStoryData.title;
         
-        // Initialisation de la carte, centrée sur la position fournie (utilisateur ou cible)
-        mymap = L.map('mapid').setView([centerLat, centerLon], 13);
+        // --- NOUVEAU : Délai pour laisser le DOM se mettre à jour ---
+        setTimeout(() => {
+            // Initialisation de la carte, centrée sur la position fournie (utilisateur ou cible)
+            mymap = L.map('mapid').setView([centerLat, centerLon], 13);
+            
+            // Forcer le recalcul de la taille de la carte après l'initialisation
+            mymap.invalidateSize(); 
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors',
-            maxZoom: 19
-        }).addTo(mymap);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(mymap);
 
-        // Marqueur de la Cible
-        L.marker([targetLat, targetLon]).addTo(mymap)
-            .bindPopup(step.targetName || 'Cible').openPopup();
+            // Marqueur de la Cible
+            L.marker([targetLat, targetLon]).addTo(mymap)
+                .bindPopup(step.targetName || 'Cible').openPopup();
 
-        // Cercle de Tolérance
-        L.circle([targetLat, targetLon], {
-            color: 'red',
-            fillColor: '#f03',
-            fillOpacity: 0.2,
-            radius: rayon
-        }).addTo(mymap);
-        
-        if (isFallback) {
-             APP_DESCRIPTION.textContent = "Géolocalisation non autorisée. Carte centrée sur la cible.";
-        }
+            // Cercle de Tolérance
+            L.circle([targetLat, targetLon], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.2,
+                radius: rayon
+            }).addTo(mymap);
+            
+            if (isFallback) {
+                 APP_DESCRIPTION.textContent = "Géolocalisation en cours... Carte centrée sur la cible en attendant.";
+            }
+        }, 250); // Délai de 250 ms pour le rendu du DOM
     };
     
     // --- CONTOURNNEMENT (FALLBACK) ---
@@ -153,16 +159,16 @@ function renderMap(step) {
         // Mettre à jour le marqueur utilisateur sur la carte
         if (userMarker) {
             userMarker.setLatLng([userLat, userLon]);
-        } else {
+        } else if (mymap) {
             // Créer un marqueur pour l'utilisateur
             userMarker = L.marker([userLat, userLon]).addTo(mymap).bindPopup("Vous êtes ici").openPopup();
         }
         
         // S'assurer que la carte suit l'utilisateur
-        mymap.panTo([userLat, userLon]);
+        if (mymap) mymap.panTo([userLat, userLon]);
 
     }, (error) => {
-        // En cas d'erreur (souvent dû à un refus)
+        // En cas d'erreur
         console.error("Erreur GPS:", error);
         clearTimeout(gpsTimeout);
         if (!mapInitialized) {
