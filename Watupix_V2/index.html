@@ -6,6 +6,13 @@
     <title>Watupix Story - Carte GPS</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        html, body, #app-container {
+            height: 100%; /* Important pour que vh soit bien calculé */
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
 
@@ -44,7 +51,7 @@
         </div>
     </div>
 
-    <div id="app-container" style="display:none;">
+    <div id="app-container" style="display:none; height: 100%;">
         <h1 id="app-title">Chargement de la carte...</h1>
         <p id="app-description"></p>
         
