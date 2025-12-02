@@ -19,7 +19,11 @@
       "stepId": 2,
       "type": "RADAR_GPS",
       "targetName": "Boulangerie de l'Oncle Hans (Rue des Orfèvres)",
-      "targetLocation": { "lat": 48.5830, "lon": 7.7510, "radius": 20 },
+      "targetLocation": { 
+  "lat": 44.269917, 
+  "lon": 4.756360, 
+  "radius": 20 
+},
       "clueText": "Le signal s'arrête là où ça sent le kougelhopf. (Cible : 48.5830, 7.7510)",
       "nextStepId": 3,
       "simulation_button": true
@@ -41,4 +45,5 @@
       "actionButtonText": "Terminer l'Aventure"
     }
   ]
+
 }
