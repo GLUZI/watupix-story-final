@@ -98,18 +98,13 @@ function renderMap(step) {
         // Initialisation de la carte, centrée sur la position fournie (utilisateur ou cible)
         mymap = L.map('mapid').setView([centerLat, centerLon], 13);
         
-        // CORRECTION MAJEURE: Forcer l'initialisation de la carte après que le DOM soit prêt
-        mymap.on('load', function() {
-            mymap.invalidateSize();
-            console.log('Map size invalidated after loading.');
-        });
-        
-        // Si l'initialisation vient du GPS, cela fonctionne souvent mieux
-        if (!isFallback) {
-             mymap.on('locationfound', function() {
-                 mymap.invalidateSize();
-             });
-        }
+        // CORRECTION CLASSIQUE : Forcer le recalcul de la taille de la carte après un très petit délai
+        setTimeout(() => {
+            if(mymap) {
+                mymap.invalidateSize();
+                console.log('Map size invalidated after 100ms timeout.');
+            }
+        }, 100); 
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors',
