@@ -1,1 +1,26 @@
-
+{
+  "title": "CARTE DE TEST STRASBOURG",
+  "steps": [
+    {
+      "stepId": 0,
+      "taper": "ECRAN_D_INTRODUCTION",
+      "titre": "Début de l'expérience GPS",
+      "description": "Ceci est un test pour vérifier l'affichage de la carte de Strasbourg et votre géolocalisation.",
+      "actionButtonText": "ACTIVER LA CARTE",
+      "nextStepId": 1
+    },
+    {
+      "stepId": 1,
+      "taper": "RADAR_GPS",
+      "targetName": "Cathédrale de Strasbourg",
+      "titre": "Carte GPS de Strasbourg",
+      "targetLocation": {
+        "lat": 48.581895, 
+        "lon": 7.750731, 
+        "rayon": 20000000 
+      },
+      "clueText": "Regardez la carte ci-dessous. Vous devriez voir le marqueur de la Cathédrale. Votre position est le marqueur 'Vous êtes ici'.",
+      "nextStepId": 1 
+    }
+  ]
+}
