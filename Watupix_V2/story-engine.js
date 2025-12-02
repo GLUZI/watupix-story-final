@@ -11,7 +11,7 @@ let watchId = null; // ID de la surveillance GPS
 
 // --- DÉMARRAGE DE L'APPLICATION ---
 document.addEventListener('DOMContentLoaded', () => {
-    loadStory('stories/bretzel_dor.json');
+    loadStory('Watupix_V2/stories/bretzel_dor.json');
 });
 
 // 1. CHARGEMENT DE L'HISTOIRE PAR JSON
@@ -181,4 +181,5 @@ function simulateArrival() {
         currentStepIndex = radarStep.nextStepId - 1;
         renderStep(nextStep);
     }
+
 }
