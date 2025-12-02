@@ -30,7 +30,7 @@ function loadStory(path) {
             })
             .catch(error => {
                 APP_TITLE.textContent = 'Erreur de chargement';
-                APP_DESCRIPTION.textContent = 'Le fichier JSON est manquant ou mal formaté.';
+                APP_DESCRIPTION.textContent = 'Le fichier JSON est manquant ou mal formaté. (Vérifiez le nom du fichier !)';
                 console.error('Erreur de chargement JSON', error);
             });
     } catch (error) {
@@ -68,8 +68,13 @@ function renderStep(step) {
 
 // --- AFFICHAGE DE LA CARTE Leaflet (RADAR_GPS) ---
 function renderMap(step) {
-    CONTENT_AREA.innerHTML = '<div id="mapid" style="height: 50vh; width: 100vw;"></div>';
+    // Création du conteneur de la carte avec une hauteur fixée (50% de la fenêtre)
+    CONTENT_AREA.innerHTML = `
+        <div id="mapid" style="height: 50vh; width: 100vw; margin-bottom: 10px;"></div>
+        <p>${step.clueText}</p>
+    `;
     
+    // Vérification de la géolocalisation
     if (!navigator.geolocation) {
         APP_DESCRIPTION.textContent = 'La géolocalisation n\'est pas supportée par votre navigateur.';
         return;
@@ -110,33 +115,28 @@ function renderMap(step) {
 
         const distance = calculateDistance(userLat, userLon, targetLocation.lat, targetLocation.lon);
 
-        APP_DESCRIPTION.textContent = `Distance cible : ${Math.round(distance)} mètres.`;
+        // Afficher la distance dans la description (au-dessus de la carte)
+        APP_DESCRIPTION.textContent = `Distance restante jusqu'à la cible : ${Math.round(distance)} mètres.`;
 
         // Mettre à jour le marqueur utilisateur sur la carte
         if (userMarker) {
             userMarker.setLatLng([userLat, userLon]);
         } else {
+            // Créer un marqueur pour l'utilisateur
             userMarker = L.marker([userLat, userLon]).addTo(mymap).bindPopup("Vous êtes ici").openPopup();
         }
         
         // S'assurer que la carte suit l'utilisateur
         mymap.panTo([userLat, userLon]);
 
-
-        // VÉRIFICATION DE L'ARRIVÉE (Cette logique est inactive tant que rayon est très grand)
-        if (distance <= rayon) {
-             // Ici, vous pouvez ajouter l'action pour passer à l'étape suivante
-        }
-
     }, (error) => {
         console.error("Erreur GPS:", error);
-        APP_DESCRIPTION.textContent = "Erreur de géolocalisation. Assurez-vous que le GPS est activé.";
+        APP_DESCRIPTION.textContent = "Erreur de géolocalisation. Assurez-vous que le GPS est activé et autorisé pour ce site.";
     }, { enableHighAccuracy: true });
 }
 
 // --- FONCTIONS SIMPLES ---
 function renderSimpleScreen(step) {
-    // Logique d'affichage pour les écrans d'intro/récompense
     MAIN_BUTTON.textContent = step.actionButtonText || "Continuer";
     MAIN_BUTTON.onclick = () => {
         const nextStep = currentStoryData.steps.find(s => s.stepId === step.nextStepId);
@@ -148,7 +148,6 @@ function renderSimpleScreen(step) {
 }
 
 // --- UTILITAIRE GPS (Calcul de distance) ---
-// Formule de la Haversine simplifiée pour une petite distance (en mètres)
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371000; // Rayon de la Terre en mètres
     const dLat = (lat2 - lat1) * (Math.PI / 180);
